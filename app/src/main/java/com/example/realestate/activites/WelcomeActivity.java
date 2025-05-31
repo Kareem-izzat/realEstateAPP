@@ -47,7 +47,8 @@ public class WelcomeActivity extends AppCompatActivity {
                     if (response != null) {
                         Toast.makeText(this, "API Success!", Toast.LENGTH_SHORT).show();
 
-                        startActivity(new Intent(this, MainActivity.class));
+                        Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
+                        startActivity(intent);
                         finish();
                     } else {
                         Toast.makeText(this, "Failed to connect to API", Toast.LENGTH_LONG).show();
