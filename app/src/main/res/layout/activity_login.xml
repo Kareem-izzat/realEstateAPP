@@ -8,7 +8,6 @@
     android:padding="24dp"
     android:background="#F9FAFB">
 
-    <!-- Logo -->
     <ImageView
         android:id="@+id/logoImage"
         android:layout_width="100dp"
@@ -66,7 +65,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Login Button -->
+    <CheckBox
+        android:id="@+id/cbRememberMe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remember Me"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/etPassword"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogin"
         android:layout_width="0dp"
@@ -74,12 +81,13 @@
         android:text="Login"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         app:cornerRadius="16dp"
         app:backgroundTint="#2E86DE"
-        app:layout_constraintTop_toBottomOf="@id/etPassword"
+        app:layout_constraintTop_toBottomOf="@id/cbRememberMe"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
 
     <!-- Register Link -->
     <TextView
