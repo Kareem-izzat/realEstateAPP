@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:padding="24dp">
+
+  <!-- Logo with animation -->
+  <ImageView
+      android:id="@+id/logoImage"
+      android:layout_width="160dp"
+      android:layout_height="160dp"
+      android:layout_marginTop="48dp"
+      android:src="@drawable/logo"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent" />
+
+  <!-- Title -->
+  <TextView
+      android:id="@+id/appTitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Real Estate Hub"
+      android:textSize="28sp"
+      android:textStyle="bold"
+      android:textColor="#2E86DE"
+      android:fontFamily="sans-serif-medium"
+      app:layout_constraintTop_toBottomOf="@id/logoImage"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      android:layout_marginTop="16dp"/>
+
+  <!-- Subtitle -->
+  <TextView
+      android:id="@+id/appSubtitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Find your dream home"
+      android:textSize="16sp"
+      android:textColor="#555555"
+      app:layout_constraintTop_toBottomOf="@id/appTitle"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      android:layout_marginTop="4dp"/>
+
+  <!-- Button -->
+  <com.google.android.material.button.MaterialButton
+      android:id="@+id/btnGetStarted"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:text="Get Started"
+      android:textAllCaps="false"
+      app:cornerRadius="16dp"
+      app:iconPadding="8dp"
+      android:textColor="#FFFFFF"
+      app:backgroundTint="#2E86DE"
+      android:layout_marginTop="40dp"
+      app:layout_constraintTop_toBottomOf="@id/appSubtitle"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,9 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.RealEstate" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Theme.RealEstateApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">#2E86DE</item>
+        <item name="colorPrimaryVariant">#1B4F72</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#FFC312</item>
+        <item name="colorOnSecondary">#000000</item>
     </style>
-
-    <style name="Theme.RealEstate" parent="Base.Theme.RealEstate" />
 </resources>
