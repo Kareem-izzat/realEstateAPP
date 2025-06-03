@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <!-- <item android:id="@+id/nav_favorites" android:title="Favorites" android:icon="@drawable/ic_favorite"/>
+<item android:id="@+id/nav_contact" android:title="Contact Us" android:icon="@drawable/ic_contact"/>
+<item android:id="@+id/nav_logout" android:title="Logout" android:icon="@drawable/ic_logout"/> -->
+
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:title="Home"
+        android:icon="@drawable/icon_home" />
+    <item
+        android:id="@+id/nav_properties"
+        android:title="Properties"
+        android:icon="@drawable/icon_properties" />
+    <item
+        android:id="@+id/nav_reservations"
+        android:title="Reservations"
+        android:icon="@drawable/icon_reservations" />
+    <item
+        android:id="@+id/nav_favorites"
+        android:title="Favorite"
+        android:icon="@drawable/icon_favorite" />
+    <item
+        android:id="@+id/nav_featured"
+        android:title="Featured Properties"
+        android:icon="@drawable/icon_featured" />
+    <item
+        android:id="@+id/nav_profile_management"
+        android:title="Profile Management"
+        android:icon="@drawable/icon_manage" />
+    <item
+        android:id="@+id/nav_contact"
+        android:title="Contact Us"
+        android:icon="@drawable/icon_contact" />
+    <item
+        android:id="@+id/nav_logout"
+        android:title="Log out"
+        android:icon="@drawable/icon_logout" />
+</menu>

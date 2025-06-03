@@ -10,10 +10,8 @@ public class HttpManager {
         BufferedReader bufferedReader = null;
         try {
             URL url = new URL(URL);
-            HttpURLConnection httpURLConnection =
-                    (HttpURLConnection) url.openConnection();
-            bufferedReader = new BufferedReader(new
-                    InputStreamReader(httpURLConnection.getInputStream()));
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
             StringBuilder stringBuilder = new StringBuilder();
             String line = bufferedReader.readLine();
             while (line != null) {
@@ -23,6 +21,7 @@ public class HttpManager {
             return stringBuilder.toString();
         } catch (Exception ex) {
             Log.d("HttpURLConnection", ex.toString());
+            Log.e("HTTP_ERROR", "Exception: " + ex.getMessage());
         }
         return null;
     }

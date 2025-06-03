@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.realestate.R;
+import com.example.realestate.utils.DataBaseHelper;
 import com.example.realestate.utils.SharedPrefManager;
 
 public class LoginActivity extends AppCompatActivity {
@@ -28,23 +30,62 @@ public class LoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Initialize Views
         TextView tvRegisterLink = findViewById(R.id.tvRegisterLink);
+        EditText etEmail = findViewById(R.id.etEmail);
+        EditText etPassword = findViewById(R.id.etPassword);
+        CheckBox cbRememberMe = findViewById(R.id.cbRememberMe);
+        Button btnLogin = findViewById(R.id.btnLogin);
+
+        DataBaseHelper dbHelper = new DataBaseHelper(this, "Project_DB", null, 1);
+
+        // Shared Preferences
+        sharedPrefManager = SharedPrefManager.getInstance(this);
+        String savedEmail = sharedPrefManager.readString("email", "");
+        etEmail.setText(savedEmail);
+
         tvRegisterLink.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
-        CheckBox cbRememberMe = findViewById(R.id.cbRememberMe);
-        EditText etEmail = findViewById(R.id.etEmail);
-        String savedEmail = SharedPrefManager.getInstance(this).readString("email", "");
-        etEmail.setText(savedEmail);
-        sharedPrefManager =SharedPrefManager.getInstance(this);
-        Button btnLogin = findViewById(R.id.btnLogin);
+
+
         btnLogin.setOnClickListener(v -> {
+            String email = etEmail.getText().toString().trim();
+            String password = etPassword.getText().toString();
+
             if (cbRememberMe.isChecked()) {
-                sharedPrefManager.getInstance(this).writeString("email", etEmail.getText().toString());
+                sharedPrefManager.writeString("email", email);
             } else {
-                sharedPrefManager.getInstance(this).writeString("email", "");
+                sharedPrefManager.writeString("email", "");
             }
+
+            // Input validation
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Email and password are required", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Mock Admin Login
+            if (email.equals("admin@admin.com") && password.equals("Admin123!")) {
+                Toast.makeText(this, "Admin login successful", Toast.LENGTH_SHORT).show();
+                //Intent intent = new Intent(LoginActivity.this, AdminHomeActivity.class);
+                //startActivity(intent);
+                finish();
+                return;
+            }
+
+            if (dbHelper.isValidUser(email, password)) {
+                Toast.makeText(this, "User login successful", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                startActivity(intent);
+                //finish();
+            } else {
+                Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show();
+            }
+
+
         });
 
     }
