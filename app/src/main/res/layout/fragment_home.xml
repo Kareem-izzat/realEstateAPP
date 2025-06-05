@@ -1,13 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.HomeFragment">
+    android:padding="24dp"
+    android:background="?android:colorBackground">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Home fragment" />
-</FrameLayout>
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- Section title -->
+        <TextView
+            android:id="@+id/about_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="About Us"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorPrimary"
+            android:layout_marginBottom="16dp"
+            android:letterSpacing="0.04" />
+
+        <!-- About card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="12dp"
+            app:cardBackgroundColor="@android:color/white"
+            android:layout_margin="8dp">
+
+            <TextView
+                android:id="@+id/about_text"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:textSize="16sp"
+                android:textColor="#444444"
+                android:lineSpacingExtra="8dp"
+                android:justificationMode="inter_word"
+                android:text="We are Kareem Alqutob and Ahmad Hussein, two passionate Computer Engineering students who share a dream of building a business in the real estate industry. This app is the result of combining our technical background with our entrepreneurial ambition. Thank you for joining us on this journey!" />
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</ScrollView>

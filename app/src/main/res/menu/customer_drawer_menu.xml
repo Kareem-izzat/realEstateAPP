@@ -1,40 +1,51 @@
-<?xml version="1.0" encoding="utf-8"?>
- <!-- <item android:id="@+id/nav_favorites" android:title="Favorites" android:icon="@drawable/ic_favorite"/>
-<item android:id="@+id/nav_contact" android:title="Contact Us" android:icon="@drawable/ic_contact"/>
-<item android:id="@+id/nav_logout" android:title="Logout" android:icon="@drawable/ic_logout"/> -->
-
-
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/nav_home"
-        android:title="Home"
-        android:icon="@drawable/icon_home" />
-    <item
-        android:id="@+id/nav_properties"
-        android:title="Properties"
-        android:icon="@drawable/icon_properties" />
-    <item
-        android:id="@+id/nav_reservations"
-        android:title="Reservations"
-        android:icon="@drawable/icon_reservations" />
-    <item
-        android:id="@+id/nav_favorites"
-        android:title="Favorite"
-        android:icon="@drawable/icon_favorite" />
-    <item
-        android:id="@+id/nav_featured"
-        android:title="Featured Properties"
-        android:icon="@drawable/icon_featured" />
-    <item
-        android:id="@+id/nav_profile_management"
-        android:title="Profile Management"
-        android:icon="@drawable/icon_manage" />
-    <item
-        android:id="@+id/nav_contact"
-        android:title="Contact Us"
-        android:icon="@drawable/icon_contact" />
-    <item
-        android:id="@+id/nav_logout"
-        android:title="Log out"
-        android:icon="@drawable/icon_logout" />
+
+    <!-- Main Section -->
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/icon_home"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_properties"
+            android:icon="@drawable/icon_properties"
+            android:title="Properties" />
+        <item
+            android:id="@+id/nav_featured"
+            android:icon="@drawable/icon_featured"
+            android:title="Featured Properties" />
+    </group>
+
+    <!-- My Account Section -->
+    <item android:title="My Account">
+        <menu>
+            <item
+                android:id="@+id/nav_reservations"
+                android:icon="@drawable/icon_reservations"
+                android:title="Your Reservations" />
+            <item
+                android:id="@+id/nav_favorites"
+                android:icon="@drawable/icon_favorite"
+                android:title="Your Favorites" />
+            <item
+                android:id="@+id/nav_profile"
+                android:icon="@drawable/icon_manage"
+                android:title="Profile Management" />
+        </menu>
+    </item>
+
+    <!-- Support Section -->
+    <item android:title="Support">
+        <menu>
+            <item
+                android:id="@+id/nav_contact"
+                android:icon="@drawable/icon_contact"
+                android:title="Contact Us" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/icon_logout"
+                android:title="Logout" />
+        </menu>
+    </item>
+
 </menu>

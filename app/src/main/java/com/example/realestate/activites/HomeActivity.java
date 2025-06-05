@@ -2,12 +2,9 @@ package com.example.realestate.activites;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,101 +20,89 @@ import com.example.realestate.fragments.FeaturedFragment;
 import com.example.realestate.fragments.HomeFragment;
 import com.example.realestate.fragments.ProfileManageFragment;
 import com.example.realestate.fragments.PropertiesFragment;
+
 import com.example.realestate.fragments.YourReservationsFragment;
 import com.google.android.material.navigation.NavigationView;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    DrawerLayout drawerLayout;
-    NavigationView nv_side;
-    ActionBarDrawerToggle toggle;
-    Toolbar toolbar;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
-        nv_side = findViewById(R.id.nv_side);
-        toolbar = findViewById(R.id.toolbar);
+        // Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        // Drawer Layout
+        drawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        nv_side.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment selectedFragment = null;
+        navigationView.setNavigationItemSelectedListener(this);
 
-                int id = item.getItemId();
-
-                if (id == R.id.nav_home) {
-                    selectedFragment = new HomeFragment();
-                }
-                else if (id == R.id.nav_properties) {
-                    selectedFragment = new PropertiesFragment();
-                }
-                else if (id == R.id.nav_reservations) {
-                    selectedFragment = new YourReservationsFragment();
-                }
-                else if (id == R.id.nav_contact) {
-                    selectedFragment = new ContactFragment();
-                }
-                else if (id == R.id.nav_favorites) {
-                    selectedFragment = new FavoritesFragment();
-                }
-                else if (id == R.id.nav_featured) {
-                    selectedFragment = new FeaturedFragment();
-                }
-                else if (id == R.id.nav_profile_management) {
-                    selectedFragment = new ProfileManageFragment();
-                }
-                else if (id == R.id.nav_logout) {
-                    Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    return true;
-                }
-
-                if (selectedFragment != null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, selectedFragment)
-                            .commit();
-                }
-
-                drawerLayout.closeDrawer(GravityCompat.START);
-                return true;
-            }
-        });
-
-        // Show home by default
+        // Default fragment
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new HomeFragment())
                     .commit();
-            nv_side.setCheckedItem(R.id.nav_home);
-        }
+            navigationView.setCheckedItem(R.id.nav_home);
 
-        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                } else {
-                    finishAffinity();
-                }
-            }
-        });
+        }
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (toggle.onOptionsItemSelected(item)) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Fragment selectedFragment = null;
+
+        int id = item.getItemId();
+
+        if (id == R.id.nav_home) {
+            selectedFragment = new HomeFragment();
+        } else if (id == R.id.nav_properties) {
+            selectedFragment = new PropertiesFragment();
+        } else if (id == R.id.nav_reservations) {
+            selectedFragment = new YourReservationsFragment();
+        } else if (id == R.id.nav_favorites) {
+            selectedFragment = new FavoritesFragment();
+        } else if (id == R.id.nav_featured) {
+            selectedFragment = new FeaturedFragment();
+        } else if (id == R.id.nav_profile) {
+            selectedFragment = new ProfileManageFragment();
+        } else if (id == R.id.nav_contact) {
+            selectedFragment = new ContactFragment();
+        } else if (id == R.id.nav_logout) {
+            Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
             return true;
         }
-        return super.onOptionsItemSelected(item);
+
+
+        if (selectedFragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, selectedFragment)
+                    .commit();
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 }

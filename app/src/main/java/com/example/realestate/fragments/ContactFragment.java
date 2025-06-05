@@ -1,5 +1,7 @@
 package com.example.realestate.fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,8 +9,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.realestate.R;
+import com.google.android.material.button.MaterialButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +65,33 @@ public class ContactFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_contact, container, false);
+        View view = inflater.inflate(R.layout.fragment_contact, container, false);
+        MaterialButton btnCall = view.findViewById(R.id.btnCall);
+        MaterialButton btnMap = view.findViewById(R.id.btnMap);
+        MaterialButton btnEmail = view.findViewById(R.id.btnEmail);
+
+        btnCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent dialIntent =new Intent();
+                dialIntent.setAction(Intent.ACTION_DIAL);
+                dialIntent.setData(Uri.parse("tel:+970599919950"));
+                startActivity(dialIntent);
+            }
+        });
+        btnEmail.setOnClickListener(v -> {
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+            emailIntent.setData(Uri.parse("mailto:RealEstateHub@agency.com"));
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Inquiry");
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "Hello RealEstateHub,");
+            startActivity(Intent.createChooser(emailIntent, "Send email via..."));
+        });
+        btnMap.setOnClickListener(v -> {
+            Intent mapsIntent =new Intent();
+            mapsIntent.setAction(Intent.ACTION_VIEW);
+            mapsIntent.setData(Uri.parse("geo:19.076,72.8777"));
+            startActivity(mapsIntent);
+        });
+        return view;
     }
 }

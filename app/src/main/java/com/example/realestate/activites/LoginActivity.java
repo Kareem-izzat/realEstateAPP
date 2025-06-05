@@ -1,7 +1,9 @@
 package com.example.realestate.activites;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -36,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText etEmail = findViewById(R.id.etEmail);
         EditText etPassword = findViewById(R.id.etPassword);
         CheckBox cbRememberMe = findViewById(R.id.cbRememberMe);
+        cbRememberMe.setChecked(true);
         Button btnLogin = findViewById(R.id.btnLogin);
 
         DataBaseHelper dbHelper = new DataBaseHelper(this, "Project_DB", null, 1);
@@ -51,10 +54,12 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+
+
         btnLogin.setOnClickListener(v -> {
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString();
-
+            sharedPrefManager.writeString("user_email", email);// always save email in shared prefernces
             if (cbRememberMe.isChecked()) {
                 sharedPrefManager.writeString("email", email);
             } else {
@@ -84,6 +89,7 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show();
             }
+
 
 
         });
