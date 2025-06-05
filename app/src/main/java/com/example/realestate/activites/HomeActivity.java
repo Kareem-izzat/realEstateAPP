@@ -1,8 +1,12 @@
 package com.example.realestate.activites;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +26,8 @@ import com.example.realestate.fragments.ProfileManageFragment;
 import com.example.realestate.fragments.PropertiesFragment;
 
 import com.example.realestate.fragments.YourReservationsFragment;
+import com.example.realestate.utils.DataBaseHelper;
+import com.example.realestate.utils.SharedPrefManager;
 import com.google.android.material.navigation.NavigationView;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -56,6 +62,27 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     .commit();
             navigationView.setCheckedItem(R.id.nav_home);
 
+        }
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView tvUserName = headerView.findViewById(R.id.tvUserName);
+
+
+        SharedPrefManager sharedPrefManager;
+        sharedPrefManager = SharedPrefManager.getInstance(this);
+        String email = sharedPrefManager.readString("email", "");
+
+        if (email != null) {
+            DataBaseHelper db = new DataBaseHelper(this, "Project_DB", null, 1);
+            Cursor cursor = db.getUserByEmail(email);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                String firstName = cursor.getString(cursor.getColumnIndexOrThrow("first_name"));
+                String lastName = cursor.getString(cursor.getColumnIndexOrThrow("last_name"));
+                tvUserName.setText("Welcome, " + firstName + " " + lastName);
+
+                cursor.close();
+            }
         }
     }
 

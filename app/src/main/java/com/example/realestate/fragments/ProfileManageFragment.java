@@ -1,9 +1,9 @@
 package com.example.realestate.fragments;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,7 +11,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.realestate.R;
@@ -19,72 +21,31 @@ import com.example.realestate.utils.DataBaseHelper;
 import com.example.realestate.utils.SharedPrefManager;
 import com.google.android.material.button.MaterialButton;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileManageFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ProfileManageFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final int PICK_IMAGE_REQUEST = 101;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ProfileManageFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileManageFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileManageFragment newInstance(String param1, String param2) {
-        ProfileManageFragment fragment = new ProfileManageFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
     EditText etFirstName, etLastName, etPhone, etPassword, etConfirmPassword;
     MaterialButton btnUpdate;
+    ImageView imgProfile;
+    Uri selectedImageUri;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile_manage, container, false);
+
         etFirstName = view.findViewById(R.id.etFirstName);
         etLastName = view.findViewById(R.id.etLastName);
         etPhone = view.findViewById(R.id.etPhone);
         etPassword = view.findViewById(R.id.etPassword);
         etConfirmPassword = view.findViewById(R.id.etConfirmPassword);
         btnUpdate = view.findViewById(R.id.btnUpdate);
-        SharedPrefManager sharedPrefManager;
-        sharedPrefManager = SharedPrefManager.getInstance(requireContext());
-       String email = sharedPrefManager.readString("email", "");
+        imgProfile = view.findViewById(R.id.imgProfile);
+        Button btnChangePhoto = view.findViewById(R.id.btnChangePhoto);
 
-        Toast.makeText(getContext(), "Email: " + email, Toast.LENGTH_SHORT).show();
-
+        SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance(requireContext());
+        String email = sharedPrefManager.readString("email", "");
 
         if (email != null) {
             DataBaseHelper dbHelper = new DataBaseHelper(getContext(), "Project_DB", null, 1);
@@ -93,9 +54,30 @@ public class ProfileManageFragment extends Fragment {
                 etFirstName.setText(cursor.getString(cursor.getColumnIndexOrThrow("first_name")));
                 etLastName.setText(cursor.getString(cursor.getColumnIndexOrThrow("last_name")));
                 etPhone.setText(cursor.getString(cursor.getColumnIndexOrThrow("phone")));
+
+                String imageUriStr = cursor.getString(cursor.getColumnIndexOrThrow("profile_image"));
+                if (imageUriStr != null && !imageUriStr.isEmpty()) {
+                    try {
+                        selectedImageUri = Uri.parse(imageUriStr);
+                        imgProfile.setImageURI(selectedImageUri);
+                    } catch (Exception e) {
+                        imgProfile.setImageResource(R.drawable.no_picture);
+                    }
+                } else {
+                    imgProfile.setImageResource(R.drawable.no_picture);
+                }
+
                 cursor.close();
             }
         }
+
+        btnChangePhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+            startActivityForResult(intent, PICK_IMAGE_REQUEST);
+
+        });
 
         btnUpdate.setOnClickListener(v -> {
             String first = etFirstName.getText().toString().trim();
@@ -109,8 +91,19 @@ public class ProfileManageFragment extends Fragment {
                 return;
             }
 
-            if (phone.length() < 7 || !phone.matches("\\+?[0-9]+")) {
-                Toast.makeText(getContext(), "Invalid phone number.", Toast.LENGTH_SHORT).show();
+            String[] allowedPrefixes = {"+970", "+962", "+210"};
+            boolean valid = false;
+            for (String prefix : allowedPrefixes) {
+                if (phone.startsWith(prefix)) {
+                    String rest = phone.substring(prefix.length());
+                    if (rest.matches("\\d{9}")) {
+                        valid = true;
+                    }
+                    break;
+                }
+            }
+            if (!valid) {
+                Toast.makeText(getContext(), "Phone must start with a valid country code and be followed by exactly 9 digits.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -119,7 +112,6 @@ public class ProfileManageFragment extends Fragment {
                     Toast.makeText(getContext(), "Password must include a letter, number, and special character.", Toast.LENGTH_LONG).show();
                     return;
                 }
-
                 if (!pass.equals(confirmPass)) {
                     Toast.makeText(getContext(), "Passwords do not match.", Toast.LENGTH_SHORT).show();
                     return;
@@ -127,19 +119,31 @@ public class ProfileManageFragment extends Fragment {
             }
 
             DataBaseHelper dbHelper = new DataBaseHelper(getContext(), "Project_DB", null, 1);
-            boolean updated = dbHelper.updateUser(email, first, last, phone, pass.isEmpty() ? null : pass);
+            boolean updated = dbHelper.updateUser(email, first, last, phone,
+                    pass.isEmpty() ? null : pass,
+                    selectedImageUri != null ? selectedImageUri.toString() : null);
 
-            if (updated) {
-                Toast.makeText(getContext(), "Profile updated successfully.", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getContext(), "Update failed.", Toast.LENGTH_SHORT).show();
-            }
-
-
-            Toast.makeText(getContext(), "Profile updated!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), updated ? "Profile updated successfully." : "Update failed.", Toast.LENGTH_SHORT).show();
         });
 
-
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            selectedImageUri = data.getData();
+            requireContext().getContentResolver().takePersistableUriPermission(
+                    selectedImageUri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+            );
+
+            if (selectedImageUri != null) {
+                imgProfile.setImageURI(selectedImageUri);
+
+
+            }
+        }
     }
 }

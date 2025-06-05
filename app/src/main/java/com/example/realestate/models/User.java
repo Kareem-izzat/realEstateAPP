@@ -9,10 +9,12 @@ public class User {
     private String country;
     private String city;
     private String phone;
+    private String profileImage;
+
 
     // Constructor
     public User(String email, String firstName, String lastName, String password,
-                String gender, String country, String city, String phone) {
+                String gender, String country, String city, String phone, String profileImage) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -21,7 +23,9 @@ public class User {
         this.country = country;
         this.city = city;
         this.phone = phone;
+        this.profileImage = profileImage;
     }
+
 
     // Getters
     public String getEmail() {
@@ -93,6 +97,14 @@ public class User {
         this.phone = phone;
     }
 
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
 
     @Override
     public String toString() {
@@ -103,6 +115,7 @@ public class User {
                 ", country='" + country + '\'' +
                 ", city='" + city + '\'' +
                 ", phone='" + phone + '\'' +
+                ", profileImage='" + profileImage + '\'' +
                 '}';
     }
 }

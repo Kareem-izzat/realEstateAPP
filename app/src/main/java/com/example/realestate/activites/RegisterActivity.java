@@ -66,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
         countryCodes = new HashMap<>();
         countryCodes.put("Palestine", "+970");
         countryCodes.put("Jordan", "+962");
-        countryCodes.put("Egypt", "+20");
+        countryCodes.put("Egypt", "+210");
 
         spinnerCountry.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, countries));
         ArrayAdapter<String> cityAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item);
@@ -131,11 +131,14 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             if (!phone.startsWith(expectedCode)) {
-                toast("Phone must start with the country code: " + expectedCode); return;
+                toast("Phone must start with the country code: " + expectedCode);
+                return;
             }
 
-            if (!phone.matches("\\+\\d{10,15}")) {
-                toast("Enter a valid international phone number format."); return;
+            String digitsAfterCode = phone.substring(expectedCode.length());
+            if (!digitsAfterCode.matches("\\d{9}")) {
+                toast("Phone number must be exactly 9 digits after the country code.");
+                return;
             }
 
             // Simulate success

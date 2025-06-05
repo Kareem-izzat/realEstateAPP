@@ -18,14 +18,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
                 "CREATE TABLE users (" +
-                        "email TEXT PRIMARY KEY NOT NULL, " +
-                        "password TEXT NOT NULL, " +
+                        "email TEXT PRIMARY KEY, " +
+                        "password TEXT, " +
                         "first_name TEXT, " +
                         "last_name TEXT, " +
                         "gender TEXT, " +
                         "country TEXT, " +
                         "city TEXT, " +
-                        "phone TEXT" +
+                        "phone TEXT, " +
+                        "profile_image TEXT" +
                         ");"
         );
     }
@@ -68,12 +69,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         long result = db.insert("users", null, values);
         return result != -1;
     }
-    public boolean updateUser(String email, String firstName, String lastName, String phone, @Nullable String newPassword) {
+    public boolean updateUser(String email, String firstName, String lastName, String phone,
+                              @Nullable String newPassword, @Nullable String profileImageUri) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+
         values.put("first_name", firstName);
         values.put("last_name", lastName);
         values.put("phone", phone);
+
+        if (profileImageUri != null && !profileImageUri.isEmpty()) {
+            values.put("profile_image", profileImageUri);
+        }
 
         if (newPassword != null && !newPassword.isEmpty()) {
             values.put("password", newPassword);
@@ -82,6 +89,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         int rowsAffected = db.update("users", values, "email = ?", new String[]{email});
         return rowsAffected > 0;
     }
+
     public Cursor getUserByEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM users WHERE email = ?", new String[]{email});
