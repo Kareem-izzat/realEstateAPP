@@ -143,7 +143,9 @@ public class RegisterActivity extends AppCompatActivity {
 
             // Simulate success
 
-            boolean inserted = dbHelper.insertUser(email, password, firstName, lastName, gender, country, city, phone);
+            String role = "user";
+            boolean inserted = dbHelper.insertUser(email, password, firstName, lastName, gender, country, city, phone, role);
+
 
             if (inserted) {
                 Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();

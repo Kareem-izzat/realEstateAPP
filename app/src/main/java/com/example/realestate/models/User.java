@@ -10,11 +10,14 @@ public class User {
     private String city;
     private String phone;
     private String profileImage;
+    private String role;
+
 
 
     // Constructor
     public User(String email, String firstName, String lastName, String password,
-                String gender, String country, String city, String phone, String profileImage) {
+                String gender, String country, String city, String phone,
+                String profileImage, String role) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -24,10 +27,13 @@ public class User {
         this.city = city;
         this.phone = phone;
         this.profileImage = profileImage;
+        this.role = role;
     }
 
 
-    // Getters
+
+
+
     public String getEmail() {
         return email;
     }
@@ -35,6 +41,14 @@ public class User {
     public String getFirstName() {
         return firstName;
     }
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
 
     public String getLastName() {
         return lastName;

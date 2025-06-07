@@ -59,40 +59,40 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(v -> {
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString();
-            sharedPrefManager.writeString("user_email", email);// always save email in shared prefernces
+            sharedPrefManager.writeString("user_email", email); // always save email in shared preferences
+
             if (cbRememberMe.isChecked()) {
                 sharedPrefManager.writeString("email", email);
             } else {
                 sharedPrefManager.writeString("email", "");
             }
 
-            // Input validation
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Email and password are required", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Mock Admin Login
-            if (email.equals("admin@admin.com") && password.equals("Admin123!")) {
-                Toast.makeText(this, "Admin login successful", Toast.LENGTH_SHORT).show();
-                //Intent intent = new Intent(LoginActivity.this, AdminHomeActivity.class);
-                //startActivity(intent);
-                finish();
-                return;
-            }
-
             if (dbHelper.isValidUser(email, password)) {
-                Toast.makeText(this, "User login successful", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                startActivity(intent);
-                //finish();
+                String role = dbHelper.getUserRole(email);
+                if (role != null) {
+
+
+                    if (role.equals("admin")) {
+                        Toast.makeText(this, "Admin login successful", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(LoginActivity.this, AdminHomeActivity.class));
+                    } else {
+                        Toast.makeText(this, "User login successful", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    }
+                    finish();
+                } else {
+                    Toast.makeText(this, "Failed to determine user role", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show();
             }
-
-
-
         });
+
 
     }
 }

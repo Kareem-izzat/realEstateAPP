@@ -26,9 +26,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         "country TEXT, " +
                         "city TEXT, " +
                         "phone TEXT, " +
-                        "profile_image TEXT" +
+                        "profile_image TEXT, " +
+                        "role TEXT NOT NULL" +
                         ");"
         );
+
+        // static admin account
+        db.execSQL("INSERT INTO users (email, password, first_name, last_name, gender, country, city, phone, profile_image, role) " +
+                "VALUES ('admin@admin.com', 'Admin123!', 'Admin', 'User', 'N/A', 'N/A', 'N/A', 'N/A', '', 'admin');");
     }
 
     @Override
@@ -46,7 +51,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean insertUser(String email, String password, String firstName, String lastName,
-                              String gender, String country, String city, String phone) {
+                              String gender, String country, String city, String phone, String role) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT * FROM users WHERE email = ?", new String[]{email});
@@ -65,10 +70,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         values.put("country", country);
         values.put("city", city);
         values.put("phone", phone);
+        values.put("role", role);
 
         long result = db.insert("users", null, values);
         return result != -1;
     }
+
     public boolean updateUser(String email, String firstName, String lastName, String phone,
                               @Nullable String newPassword, @Nullable String profileImageUri) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -94,6 +101,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM users WHERE email = ?", new String[]{email});
     }
+    public String getUserRole(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT role FROM users WHERE email = ?", new String[]{email});
+        if (cursor.moveToFirst()) {
+            String role = cursor.getString(0);
+            cursor.close();
+            return role;
+        }
+        cursor.close();
+        return null;
+    }
+
 
 }
 
