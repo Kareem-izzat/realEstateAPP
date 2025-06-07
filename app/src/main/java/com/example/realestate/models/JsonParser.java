@@ -21,7 +21,6 @@ public class JsonParser {
         try {
             Log.d("JSON_DEBUG", "Raw JSON:\n" + json);
             JSONObject obj = new JSONObject(json);
-            Toast.makeText(context, "hereeeee", Toast.LENGTH_LONG).show();
 
             JSONArray cats = obj.getJSONArray("categories");
             for (int i = 0; i < cats.length(); i++) {
