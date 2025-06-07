@@ -34,6 +34,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         // static admin account
         db.execSQL("INSERT INTO users (email, password, first_name, last_name, gender, country, city, phone, profile_image, role) " +
                 "VALUES ('admin@admin.com', 'Admin123!', 'Admin', 'User', 'N/A', 'N/A', 'N/A', 'N/A', '', 'admin');");
+        db.execSQL("INSERT INTO users VALUES ('ali.ramallah@mail.com', 'Ali123!', 'Ali', 'Saleh', 'Male', 'Palestine', 'Ramallah', '+970599111111', '', 'customer');");
+        db.execSQL("INSERT INTO users VALUES ('nour.nablus@mail.com', 'Nour123!', 'Nour', 'Hamdan', 'Female', 'Palestine', 'Nablus', '+970599222222', '', 'customer');");
+        db.execSQL("INSERT INTO users VALUES ('huda.hebron@mail.com', 'Huda123!', 'Huda', 'Awad', 'Female', 'Palestine', 'Hebron', '+970599333333', '', 'customer');");
+        db.execSQL("INSERT INTO users VALUES ('yazan.amman@mail.com', 'Yazan123!', 'Yazan', 'Khatib', 'Male', 'Jordan', 'Amman', '+962799444444', '', 'customer');");
+        db.execSQL("INSERT INTO users VALUES ('dana.irbid@mail.com', 'Dana123!', 'Dana', 'Salem', 'Female', 'Jordan', 'Irbid', '+962799555555', '', 'customer');");
+        db.execSQL("INSERT INTO users VALUES ('khaled.cairo@mail.com', 'Khaled123!', 'Khaled', 'Mostafa', 'Male', 'Egypt', 'Cairo', '+201000666666', '', 'customer');");
+        db.execSQL("INSERT INTO users VALUES ('mona.alex@mail.com', 'Mona123!', 'Mona', 'Youssef', 'Female', 'Egypt', 'Alexandria', '+201000777777', '', 'customer');");
+        db.execSQL("INSERT INTO users VALUES ('salma.ramallah@mail.com', 'Salma123!', 'Salma', 'Qasem', 'Female', 'Palestine', 'Ramallah', '+970599888888', '', 'customer');");
+        db.execSQL("INSERT INTO users VALUES ('tariq.amman@mail.com', 'Tariq123!', 'Tariq', 'Zahran', 'Male', 'Jordan', 'Amman', '+962799999999', '', 'customer');");
+        db.execSQL("INSERT INTO users VALUES ('amira.cairo@mail.com', 'Amira123!', 'Amira', 'Nabil', 'Female', 'Egypt', 'Cairo', '+201001111111', '', 'customer');");
     }
 
     @Override
@@ -111,6 +121,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return null;
+    }
+    public Cursor getAllCustomers() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM users WHERE role != 'admin'", null);
+    }
+
+    public boolean deleteUserByEmail(String email) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete("users", "email = ?", new String[]{email}) > 0;
     }
 
 

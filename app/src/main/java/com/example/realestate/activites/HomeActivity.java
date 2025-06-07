@@ -3,9 +3,11 @@ package com.example.realestate.activites;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,10 +68,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         View headerView = navigationView.getHeaderView(0);
         TextView tvUserName = headerView.findViewById(R.id.tvUserName);
+        ImageView imgUserProfile = headerView.findViewById(R.id.imgUserProfile);
 
-
-        SharedPrefManager sharedPrefManager;
-        sharedPrefManager = SharedPrefManager.getInstance(this);
+        SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance(this);
         String email = sharedPrefManager.readString("email", "");
 
         if (email != null) {
@@ -79,11 +80,24 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             if (cursor != null && cursor.moveToFirst()) {
                 String firstName = cursor.getString(cursor.getColumnIndexOrThrow("first_name"));
                 String lastName = cursor.getString(cursor.getColumnIndexOrThrow("last_name"));
+                String profileUri = cursor.getString(cursor.getColumnIndexOrThrow("profile_image"));
+
                 tvUserName.setText("Welcome, " + firstName + " " + lastName);
+
+                if (profileUri != null && !profileUri.isEmpty()) {
+                    try {
+                        imgUserProfile.setImageURI(Uri.parse(profileUri));
+                    } catch (Exception e) {
+                        imgUserProfile.setImageResource(R.drawable.no_picture);
+                    }
+                } else {
+                    imgUserProfile.setImageResource(R.drawable.no_picture);
+                }
 
                 cursor.close();
             }
         }
+
     }
 
     @Override

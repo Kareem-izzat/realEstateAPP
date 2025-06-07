@@ -1,0 +1,43 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Dashboard Section -->
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_dashboard"
+            android:icon="@drawable/icon_dashboard"
+            android:title="Dashboard" />
+        <item
+            android:id="@+id/nav_all_reservations"
+            android:icon="@drawable/icon_reservations"
+            android:title="All Reservations" />
+        <item
+            android:id="@+id/nav_special_offers"
+            android:icon="@drawable/icon_featured"
+            android:title="Special Offers" />
+    </group>
+
+    <!-- Admin Tools Section -->
+    <item android:title="Admin Tools">
+        <menu>
+            <item
+                android:id="@+id/nav_add_admin"
+                android:icon="@drawable/icon_admin"
+                android:title="Add New Admin" />
+            <item
+                android:id="@+id/nav_delete_customers"
+                android:icon="@drawable/icon_delete"
+                android:title="Delete Customers" />
+        </menu>
+    </item>
+
+    <!-- System Section -->
+    <item android:title="System">
+        <menu>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/icon_logout"
+                android:title="Logout" />
+        </menu>
+    </item>
+
+</menu>

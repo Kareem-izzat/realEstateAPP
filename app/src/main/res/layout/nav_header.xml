@@ -2,15 +2,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="?attr/colorPrimary"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:gravity="center"
+    android:background="?attr/colorPrimary">
+
+    <ImageView
+        android:id="@+id/imgUserProfile"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/no_picture"
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="8dp"
+
+        android:contentDescription="Profile Picture" />
 
     <TextView
         android:id="@+id/tvUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome"
+        android:text="Welcome, User"
         android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:textStyle="bold" />
 </LinearLayout>
