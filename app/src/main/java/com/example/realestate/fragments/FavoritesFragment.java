@@ -2,13 +2,24 @@ package com.example.realestate.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.realestate.R;
+import com.example.realestate.models.Property;
+import com.example.realestate.models.PropertyAdapter;
+import com.example.realestate.utils.DataBaseHelper;
+import com.example.realestate.utils.SharedPrefManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +27,12 @@ import com.example.realestate.R;
  * create an instance of this fragment.
  */
 public class FavoritesFragment extends Fragment {
+
+    private RecyclerView recyclerView;
+    private PropertyAdapter adapter;
+    private List<Property> favoriteList = new ArrayList<>();
+    private DataBaseHelper dbHelper;
+    private String currentUserEmail;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -57,10 +74,23 @@ public class FavoritesFragment extends Fragment {
         }
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorites, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_favorites, container, false);
+
+        recyclerView = view.findViewById(R.id.recycler_favorites);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        currentUserEmail = SharedPrefManager.getInstance(getContext()).readString("user_email", "");
+        dbHelper = new DataBaseHelper(getContext(), "Project_DB", null, 1);
+
+        // Get all favorite properties
+        favoriteList = dbHelper.getFavoritesForUser(currentUserEmail);
+
+        adapter = new PropertyAdapter(favoriteList, getContext(), dbHelper, currentUserEmail);
+        recyclerView.setAdapter(adapter);
+
+        return view;
     }
 }
