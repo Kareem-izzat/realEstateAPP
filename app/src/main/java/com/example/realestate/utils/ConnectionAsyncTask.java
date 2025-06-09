@@ -33,7 +33,7 @@ public class ConnectionAsyncTask extends AsyncTask<String, Void, String> {
         //((WelcomeActivity) activity).setProgress(false);
 
 
-        Toast.makeText(activity, "Raw: " + result, Toast.LENGTH_LONG).show();
+
         //Toast.makeText(activity, "Parsed: " + JsonParser.parse(result,activity), Toast.LENGTH_SHORT).show();
         if (result != null && JsonParser.parse(result, activity)) {
             //((WelcomeActivity) activity).setButtonText("Connected ✔");

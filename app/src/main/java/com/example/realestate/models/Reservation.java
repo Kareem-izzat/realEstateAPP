@@ -14,6 +14,14 @@ public class Reservation {
         this.reservationDate = reservationDate;
         this.notes = notes;
     }
+    public Reservation(int id, String userEmail, int propertyId, String reservationDate) {
+        this.id = id;
+        this.userEmail = userEmail;
+        this.propertyId = propertyId;
+        this.reservationDate = reservationDate;
+
+    }
+
 
     // Getters
     public int getId() { return id; }

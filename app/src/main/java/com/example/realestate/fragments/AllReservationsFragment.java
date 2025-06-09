@@ -1,14 +1,26 @@
 package com.example.realestate.fragments;
 
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import com.example.realestate.R;
+import com.example.realestate.models.Reservation;
+import com.example.realestate.models.ReservationAdapter;
+import com.example.realestate.utils.DataBaseHelper;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,11 +68,32 @@ public class AllReservationsFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        requireActivity().setTitle("All Reservations");
+    }
+
+    private RecyclerView recyclerView;
+    private com.example.realestate.models.AdminReservationAdapter adapter;
+    private List<Reservation> reservationList;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_all_reservations, container, false);
+        View view = inflater.inflate(R.layout.fragment_all_reservations, container, false);
+
+        recyclerView = view.findViewById(R.id.recyclerReservations);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        DataBaseHelper db = new DataBaseHelper(getContext(), "Project_DB", null, 1);
+        reservationList = db.getAllReservations();  // you must have this function implemented
+
+        adapter = new com.example.realestate.models.AdminReservationAdapter(getContext(), reservationList);
+        recyclerView.setAdapter(adapter);
+
+        return view;
     }
+
 }

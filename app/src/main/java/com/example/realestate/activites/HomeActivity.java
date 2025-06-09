@@ -99,7 +99,40 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
     }
+    public void refreshDrawerHeader() {
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView tvUserName = headerView.findViewById(R.id.tvUserName);
+        ImageView imgUserProfile = headerView.findViewById(R.id.imgUserProfile);
 
+        SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance(this);
+        String email = sharedPrefManager.readString("email", "");
+
+        if (email != null) {
+            DataBaseHelper db = new DataBaseHelper(this, "Project_DB", null, 1);
+            Cursor cursor = db.getUserByEmail(email);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                String firstName = cursor.getString(cursor.getColumnIndexOrThrow("first_name"));
+                String lastName = cursor.getString(cursor.getColumnIndexOrThrow("last_name"));
+                String profileUri = cursor.getString(cursor.getColumnIndexOrThrow("profile_image"));
+
+                tvUserName.setText("Welcome, " + firstName + " " + lastName);
+
+                if (profileUri != null && !profileUri.isEmpty()) {
+                    try {
+                        imgUserProfile.setImageURI(Uri.parse(profileUri));
+                    } catch (Exception e) {
+                        imgUserProfile.setImageResource(R.drawable.no_picture);
+                    }
+                } else {
+                    imgUserProfile.setImageResource(R.drawable.no_picture);
+                }
+
+                cursor.close();
+            }
+        }
+    }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment selectedFragment = null;
@@ -127,16 +160,22 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             return true;
         }
 
+        // Highlight selected item
+        item.setChecked(true);
 
+        // Swap fragment
         if (selectedFragment != null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, selectedFragment)
                     .commit();
         }
 
+        // Close drawer
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 
     @Override
     public void onBackPressed() {

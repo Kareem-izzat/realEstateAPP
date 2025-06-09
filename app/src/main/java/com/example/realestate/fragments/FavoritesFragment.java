@@ -73,6 +73,11 @@ public class FavoritesFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        requireActivity().setTitle("Favorites");
+    }
 
     @Nullable
     @Override

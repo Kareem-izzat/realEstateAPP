@@ -33,6 +33,11 @@ public class ContactFragment extends Fragment {
     public ContactFragment() {
         // Required empty public constructor
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        requireActivity().setTitle("Contact Us");
+    }
 
     /**
      * Use this factory method to create a new instance of

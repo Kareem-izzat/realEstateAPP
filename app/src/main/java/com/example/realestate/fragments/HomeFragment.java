@@ -29,6 +29,11 @@ public class HomeFragment extends Fragment {
     public HomeFragment() {
         // Required empty public constructor
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        requireActivity().setTitle("Home");
+    }
 
     /**
      * Use this factory method to create a new instance of

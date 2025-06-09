@@ -19,32 +19,36 @@
     <!-- My Account Section -->
     <item android:title="My Account">
         <menu>
-            <item
-                android:id="@+id/nav_reservations"
-                android:icon="@drawable/icon_reservations"
-                android:title="Your Reservations" />
-            <item
-                android:id="@+id/nav_favorites"
-                android:icon="@drawable/icon_favorite"
-                android:title="Your Favorites" />
-            <item
-                android:id="@+id/nav_profile"
-                android:icon="@drawable/icon_manage"
-                android:title="Profile Management" />
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_reservations"
+                    android:icon="@drawable/icon_reservations"
+                    android:title="Your Reservations" />
+                <item
+                    android:id="@+id/nav_favorites"
+                    android:icon="@drawable/icon_favorite"
+                    android:title="Your Favorites" />
+                <item
+                    android:id="@+id/nav_profile"
+                    android:icon="@drawable/icon_manage"
+                    android:title="Profile Management" />
+            </group>
         </menu>
     </item>
 
     <!-- Support Section -->
     <item android:title="Support">
         <menu>
-            <item
-                android:id="@+id/nav_contact"
-                android:icon="@drawable/icon_contact"
-                android:title="Contact Us" />
-            <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/icon_logout"
-                android:title="Logout" />
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_contact"
+                    android:icon="@drawable/icon_contact"
+                    android:title="Contact Us" />
+                <item
+                    android:id="@+id/nav_logout"
+                    android:icon="@drawable/icon_logout"
+                    android:title="Logout" />
+            </group>
         </menu>
     </item>
 

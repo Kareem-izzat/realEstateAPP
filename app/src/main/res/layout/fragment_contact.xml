@@ -11,23 +11,23 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Title -->
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Contact Us"
+            android:text="@string/contact_us"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="?attr/colorPrimary"
             android:layout_marginBottom="24dp"
             android:layout_gravity="center_horizontal" />
 
-        <!-- Call Button -->
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Call Us"
+            android:text="@string/call_us"
             android:textAllCaps="false"
             app:icon="@drawable/icon_contact"
             app:iconPadding="12dp"
@@ -41,7 +41,7 @@
             android:id="@+id/btnMap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Locate Us"
+            android:text="@string/locate_us"
             android:textAllCaps="false"
             app:icon="@drawable/icon_location"
             app:iconPadding="12dp"
@@ -50,12 +50,11 @@
             android:textColor="@android:color/white"
             android:layout_marginBottom="16dp" />
 
-        <!-- Email Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Email Us"
+            android:text="@string/email_us"
             android:textAllCaps="false"
             app:icon="@drawable/icon_email"
             app:iconPadding="12dp"

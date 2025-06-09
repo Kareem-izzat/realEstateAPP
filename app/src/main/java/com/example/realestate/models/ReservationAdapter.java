@@ -48,11 +48,18 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
                 .into(holder.imgThumbnail);
 
         holder.btnCancel.setOnClickListener(v -> {
-            dbHelper.cancelReservation(property.getId(), reserved.getProperty().getId());
+            int propertyId = property.getId();
+            int reservationId = reserved.getReservationId();
+            dbHelper.cancelReservationById(reservationId);
+
+
             list.remove(position);
             notifyItemRemoved(position);
+
+
             Toast.makeText(v.getContext(), "Reservation cancelled", Toast.LENGTH_SHORT).show();
         });
+
     }
 
     @Override

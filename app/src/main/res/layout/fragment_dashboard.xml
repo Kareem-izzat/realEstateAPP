@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="📊 Statistics Dashboard"
+            android:text="@string/statistics_dashboard2"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#212121"
@@ -41,14 +41,14 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginEnd="16dp"
-                    android:tint="#5E35B1"
-                    android:src="@drawable/icon_people" />
+                    android:src="@drawable/icon_people"
+                    card_view:tint="#5E35B1" />
 
                 <TextView
                     android:id="@+id/tvTotalUsers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Total Users: 0"
+                    android:text="@string/total_users_01"
                     android:textSize="20sp"
                     android:textColor="#333333"
                     android:textStyle="bold" />
@@ -75,14 +75,14 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginEnd="16dp"
-                    android:tint="#009688"
-                    android:src="@drawable/icon_save" />
+                    android:src="@drawable/icon_save"
+                    card_view:tint="#009688" />
 
                 <TextView
                     android:id="@+id/tvReservedProperties"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Reserved Properties: 0"
+                    android:text="@string/reserved_properties_01"
                     android:textSize="20sp"
                     android:textColor="#333333"
                     android:textStyle="bold" />
@@ -109,14 +109,14 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginEnd="16dp"
-                    android:tint="#FF7043"
-                    android:src="@drawable/icon_compass" />
+                    android:src="@drawable/icon_compass"
+                    card_view:tint="#FF7043" />
 
                 <TextView
                     android:id="@+id/tvTopCountry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Top Country: N/A"
+                    android:text="@string/top_country_n_a"
                     android:textSize="20sp"
                     android:textColor="#333333"
                     android:textStyle="bold" />
@@ -142,8 +142,8 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginEnd="16dp"
-                    android:tint="#AB47BC"
-                    android:src="@drawable/icon_gender" />
+                    android:src="@drawable/icon_gender"
+                    card_view:tint="#AB47BC" />
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -154,7 +154,7 @@
                         android:id="@+id/tvMalePercentage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Men: 0%"
+                        android:text="@string/men_0"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="#333333" />
@@ -163,7 +163,7 @@
                         android:id="@+id/tvFemalePercentage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Women: 0%"
+                        android:text="@string/women_0"
                         android:textSize="18sp"
                         android:layout_marginTop="6dp"
                         android:textStyle="bold"

@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="Create Admin Account"
+            android:text="@string/create_admin_account"
             android:textColor="#2E86DE"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -34,7 +34,7 @@
             android:id="@+id/etFirstName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="First Name"
+            android:hint="@string/first_name2"
             android:inputType="textPersonName"
             android:padding="12dp"
             android:layout_marginTop="16dp" />
@@ -43,7 +43,7 @@
             android:id="@+id/etLastName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Last Name"
+            android:hint="@string/last_name2"
             android:inputType="textPersonName"
             android:padding="12dp"
             android:layout_marginTop="8dp" />
@@ -52,7 +52,7 @@
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
+            android:hint="@string/email2"
             android:inputType="textEmailAddress"
             android:padding="12dp"
             android:layout_marginTop="8dp" />
@@ -61,7 +61,7 @@
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
+            android:hint="@string/password22"
             android:inputType="textPassword"
             android:padding="12dp"
             android:layout_marginTop="8dp" />
@@ -70,7 +70,7 @@
             android:id="@+id/etConfirmPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Confirm Password"
+            android:hint="@string/confirm_password2"
             android:inputType="textPassword"
             android:padding="12dp"
             android:layout_marginTop="8dp" />
@@ -100,7 +100,7 @@
             android:id="@+id/etPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Phone Number"
+            android:hint="@string/phone_number2"
             android:inputType="phone"
             android:padding="12dp"
             android:layout_marginTop="8dp" />
@@ -109,7 +109,7 @@
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Register"
+            android:text="@string/register2"
             android:textColor="#FFFFFF"
             android:textAllCaps="false"
             app:cornerRadius="16dp"

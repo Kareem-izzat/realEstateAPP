@@ -41,7 +41,6 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
         View view = LayoutInflater.from(context).inflate(R.layout.item_property, parent, false);
         return new PropertyViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull PropertyViewHolder holder, int position) {
         Property property = propertyList.get(position);
@@ -49,27 +48,42 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
         holder.tvTitle.setText(property.getTitle());
         holder.tvDescription.setText(property.getDescription());
         holder.tvLocation.setText(property.getLocation());
-        holder.tvPrice.setText("$" + property.getPrice());
 
-        Glide.with(context).load(property.getImage_url()).placeholder(R.drawable.icon_noimg).into(holder.imgThumbnail);
+        boolean hasOffer = dbHelper.isOffered(property.getId());
 
-// Set favorite button icon
+        if (hasOffer) {
+            int discountedPrice = dbHelper.getOfferPrice(property.getId());
+
+            holder.tvPrice.setText("$" + discountedPrice + "  ");
+            holder.tvPrice.setTextColor(context.getResources().getColor(android.R.color.holo_red_dark));
+
+            // Optionally show original price as strikethrough in another TextView
+            holder.tvOriginalPrice.setVisibility(View.VISIBLE);
+            holder.tvOriginalPrice.setText("$" + property.getPrice());
+            holder.tvOriginalPrice.setPaintFlags(holder.tvOriginalPrice.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            holder.tvPrice.setText("$" + property.getPrice());
+            holder.tvPrice.setTextColor(context.getResources().getColor(android.R.color.black));
+            holder.tvOriginalPrice.setVisibility(View.GONE);
+        }
+
+        Glide.with(context)
+                .load(property.getImage_url())
+                .placeholder(R.drawable.icon_noimg)
+                .into(holder.imgThumbnail);
+
         boolean isFavorite = dbHelper.isFavorite(currentUserEmail, property.getId());
-
         holder.btnFavorite.setImageResource(
                 isFavorite ? R.drawable.icon_favorite_filled : R.drawable.icon_favorite_border
         );
 
-// Handle click toggle
         holder.btnFavorite.setOnClickListener(v -> {
-            boolean currentlyFavorite = dbHelper.isFavorite(currentUserEmail, property.getId());
-
-            if (currentlyFavorite) {
+            if (dbHelper.isFavorite(currentUserEmail, property.getId())) {
                 dbHelper.removeFavorite(currentUserEmail, property.getId());
                 Toast.makeText(context, "Property removed from favorite", Toast.LENGTH_SHORT).show();
                 holder.btnFavorite.setImageResource(R.drawable.icon_favorite_border);
             } else {
-                boolean success = dbHelper.addFavorite(currentUserEmail, property.getId());
+                dbHelper.addFavorite(currentUserEmail, property.getId());
                 Toast.makeText(context, "Property added to favorite", Toast.LENGTH_SHORT).show();
                 holder.btnFavorite.setImageResource(R.drawable.icon_favorite_filled);
             }
@@ -77,7 +91,6 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
 
         holder.btnReserve.setOnClickListener(v -> {
             ReservationDetailsFragment fragment = new ReservationDetailsFragment();
-
             Bundle bundle = new Bundle();
             bundle.putSerializable("property", property);
             fragment.setArguments(bundle);
@@ -90,6 +103,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
         });
     }
 
+
     @Override
     public int getItemCount() {
         return propertyList.size();
@@ -97,7 +111,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
 
     public static class PropertyViewHolder extends RecyclerView.ViewHolder {
         ImageView imgThumbnail;
-        TextView tvTitle, tvDescription, tvLocation, tvPrice;
+        TextView tvTitle, tvDescription, tvLocation, tvPrice,tvOriginalPrice;
         ImageButton btnFavorite;
         Button btnReserve;
 
@@ -108,6 +122,7 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
             tvDescription = itemView.findViewById(R.id.tv_description);
             tvLocation = itemView.findViewById(R.id.tv_location);
             tvPrice = itemView.findViewById(R.id.tv_price);
+            tvOriginalPrice = itemView.findViewById(R.id.tv_original_price);
             btnFavorite = itemView.findViewById(R.id.btn_favorite);
             btnReserve = itemView.findViewById(R.id.btn_reserve);
         }

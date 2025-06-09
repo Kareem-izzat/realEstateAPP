@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.realestate.R;
+import com.example.realestate.activites.HomeActivity;
 import com.example.realestate.utils.DataBaseHelper;
 import com.example.realestate.utils.SharedPrefManager;
 import com.google.android.material.button.MaterialButton;
@@ -29,6 +30,11 @@ public class ProfileManageFragment extends Fragment {
     MaterialButton btnUpdate;
     ImageView imgProfile;
     Uri selectedImageUri;
+    @Override
+    public void onResume() {
+        super.onResume();
+        requireActivity().setTitle("Profile management");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -124,6 +130,8 @@ public class ProfileManageFragment extends Fragment {
                     selectedImageUri != null ? selectedImageUri.toString() : null);
 
             Toast.makeText(getContext(), updated ? "Profile updated successfully." : "Update failed.", Toast.LENGTH_SHORT).show();
+            ((HomeActivity) getActivity()).refreshDrawerHeader();
+
         });
 
         return view;

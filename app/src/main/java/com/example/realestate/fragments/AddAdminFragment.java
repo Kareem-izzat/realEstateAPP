@@ -40,6 +40,11 @@ public class AddAdminFragment extends Fragment {
     public AddAdminFragment() {
         // Required empty public constructor
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        requireActivity().setTitle("Add new Admin");
+    }
 
     /**
      * Use this factory method to create a new instance of

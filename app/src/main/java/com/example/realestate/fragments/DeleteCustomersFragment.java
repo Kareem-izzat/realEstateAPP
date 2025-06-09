@@ -27,6 +27,11 @@ public class DeleteCustomersFragment extends Fragment {
     private ArrayList<String> customers;      // filtered list
     private ArrayList<String> allCustomers;   // full list
     private ArrayAdapter<String> adapter;
+    @Override
+    public void onResume() {
+        super.onResume();
+        requireActivity().setTitle("DeleteCustomers");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

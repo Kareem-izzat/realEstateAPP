@@ -13,6 +13,25 @@ public class Property implements Serializable {
     private int bathrooms;
     private String image_url;
     private String description;
+    private boolean isFeatured;
+    private Integer discountPrice; // null means no discount
+
+    public Integer getDiscountPrice() {
+        return discountPrice;
+    }
+
+    public void setDiscountPrice(Integer discountPrice) {
+        this.discountPrice = discountPrice;
+    }
+
+
+    public boolean isFeatured() {
+        return isFeatured;
+    }
+
+    public void setFeatured(boolean featured) {
+        isFeatured = featured;
+    }
 
     public Property() {
     }

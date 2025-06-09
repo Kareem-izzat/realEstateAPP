@@ -44,6 +44,12 @@ public class YourReservationsFragment extends Fragment {
     public YourReservationsFragment() {
         // Required empty public constructor
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        requireActivity().setTitle("Your Reservations");
+    }
+
 
     /**
      * Use this factory method to create a new instance of

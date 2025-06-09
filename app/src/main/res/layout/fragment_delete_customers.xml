@@ -7,15 +7,7 @@
     android:background="#FAFAFA"
     android:padding="16dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="🗑️ Delete Customers"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="#212121"
-        android:gravity="center"
-        android:paddingBottom="20dp" />
+
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -45,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:hint="Search by name or email"
+                android:hint="@string/search_by_name_or_email2"
                 android:inputType="text"
                 android:minHeight="48dp"
                 android:textColor="#000"
