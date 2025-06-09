@@ -1,28 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#FAFAFA"
     android:padding="16dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Delete Customers"
-        android:textSize="20sp"
+        android:text="🗑️ Delete Customers"
+        android:textSize="24sp"
         android:textStyle="bold"
+        android:textColor="#212121"
         android:gravity="center"
-        android:paddingBottom="12dp" />
-    <EditText
-        android:id="@+id/search_bar"
+        android:paddingBottom="20dp" />
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search by name or email"
-        android:padding="12dp"
-        android:inputType="text" />
+        card_view:cardCornerRadius="24dp"
+        card_view:cardElevation="4dp"
+        card_view:cardUseCompatPadding="true"
+        card_view:cardBackgroundColor="#FFFFFF">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="12dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="10dp"
+                android:src="@android:drawable/ic_menu_search"
+                card_view:tint="#757575" />
+
+            <EditText
+                android:id="@+id/search_bar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="Search by name or email"
+                android:inputType="text"
+                android:minHeight="48dp"
+                android:textColor="#000"
+                android:textColorHint="#999"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <ListView
         android:id="@+id/customerListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp"
+        android:divider="#E0E0E0"
+        android:dividerHeight="1dp"
+        android:padding="4dp"
+        android:background="@android:color/white" />
 </LinearLayout>

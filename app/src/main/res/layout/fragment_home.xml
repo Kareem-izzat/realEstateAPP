@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    android:background="@android:color/background_light">
+    android:background="#FAFAFA">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,15 +12,14 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
-
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="12dp"
             android:src="@drawable/logo"
-        android:contentDescription="App Logo" />
+            android:contentDescription="App Logo" />
 
-        <!-- Section Title -->
         <TextView
             android:id="@+id/about_title"
             android:layout_width="wrap_content"
@@ -28,18 +27,18 @@
             android:text="About Us"
             android:textSize="26sp"
             android:textStyle="bold"
-            android:textColor="?attr/colorPrimary"
+            android:textColor="#2E86DE"
             android:layout_marginBottom="16dp"
-            android:letterSpacing="0.05" />
+            android:letterSpacing="0.04" />
 
-        <!-- Card container -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
             app:cardCornerRadius="16dp"
-            app:cardElevation="6dp"
-            app:cardBackgroundColor="@android:color/white">
+            app:cardElevation="8dp"
+            app:cardBackgroundColor="#FFFFFF">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -47,27 +46,25 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <!-- About Text -->
                 <TextView
                     android:id="@+id/about_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="We are Kareem Alqutob and Ahmad Hussein, two passionate Computer Engineering students who share a dream of building a business in the real estate industry. This app is the result of combining our technical background with our entrepreneurial ambition.\n\nThank you for joining us on this journey!"
+                    android:text="We are Kareem Alqutob and Ahmad Hussein, two passionate Computer Engineering students with a shared dream: building something impactful in the real estate world.\n\nThis app is our first step — a fusion of technology and ambition. Thank you for joining us on this journey!"
                     android:textSize="16sp"
-                    android:textColor="#444444"
+                    android:textColor="#333333"
                     android:lineSpacingExtra="8dp"
                     android:justificationMode="inter_word" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Footer -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="© 2025 Kareem and Ahmad"
+            android:text="© 2025 Kareem &amp; Ahmad"
             android:textSize="12sp"
-            android:textColor="#888888"
-            android:layout_marginTop="24dp" />
-
+            android:textColor="#999999"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
     </LinearLayout>
 </ScrollView>
