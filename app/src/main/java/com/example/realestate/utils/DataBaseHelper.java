@@ -8,11 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-import com.example.realestate.models.User;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class DataBaseHelper extends SQLiteOpenHelper {
 
     public DataBaseHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
@@ -136,45 +131,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete("users", "email = ?", new String[]{email}) > 0;
     }
-    public List<User> getAllUsers() {
-        List<User> userList = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM users WHERE role != 'admin'", null);
 
-        if (cursor.moveToFirst()) {
-            do {
-                String email = cursor.getString(cursor.getColumnIndexOrThrow("email"));
-                String firstName = cursor.getString(cursor.getColumnIndexOrThrow("first_name"));
-                String lastName = cursor.getString(cursor.getColumnIndexOrThrow("last_name"));
-                String password = cursor.getString(cursor.getColumnIndexOrThrow("password"));
-                String profileImage = cursor.getString(cursor.getColumnIndexOrThrow("profile_image"));
-                String gender = cursor.getString(cursor.getColumnIndexOrThrow("gender"));
-                String country = cursor.getString(cursor.getColumnIndexOrThrow("country"));
-                String city = cursor.getString(cursor.getColumnIndexOrThrow("city"));
-                String phone = cursor.getString(cursor.getColumnIndexOrThrow("phone"));
-                String role = cursor.getString(cursor.getColumnIndexOrThrow("role"));
-
-                User user = new User(
-                        email,
-                        firstName,
-                        lastName,
-                        password,
-                        gender,
-                        country,
-                        city,
-                        phone,
-                        profileImage,
-                        role
-                );
-
-                userList.add(user);
-
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        return userList;
-    }
 
 }
 

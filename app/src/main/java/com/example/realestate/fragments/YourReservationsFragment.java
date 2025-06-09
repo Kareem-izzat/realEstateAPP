@@ -2,13 +2,23 @@ package com.example.realestate.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.realestate.R;
+import com.example.realestate.models.ReservationAdapter;
+import com.example.realestate.models.ReservedProperty;
+import com.example.realestate.utils.DataBaseHelper;
+import com.example.realestate.utils.SharedPrefManager;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +26,11 @@ import com.example.realestate.R;
  * create an instance of this fragment.
  */
 public class YourReservationsFragment extends Fragment {
+
+    private RecyclerView recyclerView;
+    private ReservationAdapter adapter;
+    private DataBaseHelper dbHelper;
+    private String currentUserEmail;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -57,10 +72,22 @@ public class YourReservationsFragment extends Fragment {
         }
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_your_reservations, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_your_reservations, container, false);
+
+        recyclerView = view.findViewById(R.id.recycler_reservations);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        currentUserEmail = SharedPrefManager.getInstance(getContext()).readString("user_email", "");
+
+        dbHelper = new DataBaseHelper(getContext(), "Project_DB", null, 1);
+        List<ReservedProperty> reservedList = dbHelper.getReservationsForUser(currentUserEmail);
+
+        adapter = new ReservationAdapter(reservedList, dbHelper);
+        recyclerView.setAdapter(adapter);
+
+        return view;
     }
 }

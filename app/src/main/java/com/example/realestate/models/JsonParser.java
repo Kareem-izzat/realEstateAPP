@@ -53,4 +53,13 @@ public class JsonParser {
             return false;
         }
     }
+
+    public static Property findPropertyById(int id) {
+        for (Property p : properties) {
+            if (p.getId() == id) {
+                return p;
+            }
+        }
+        return null;
+    }
 }

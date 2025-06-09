@@ -1,6 +1,8 @@
 package com.example.realestate.models;
 
-public class Property {
+import java.io.Serializable;
+
+public class Property implements Serializable {
     private int id;
     private String title;
     private String type;

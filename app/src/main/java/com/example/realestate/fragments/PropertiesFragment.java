@@ -2,13 +2,32 @@ package com.example.realestate.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.example.realestate.R;
+import com.example.realestate.models.JsonParser;
+import com.example.realestate.models.Property;
+import com.example.realestate.models.PropertyAdapter;
+import com.example.realestate.utils.DataBaseHelper;
+import com.example.realestate.utils.SharedPrefManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +35,17 @@ import com.example.realestate.R;
  * create an instance of this fragment.
  */
 public class PropertiesFragment extends Fragment {
+
+    private RecyclerView recyclerView;
+    private PropertyAdapter adapter;
+    private List<Property> fullList = new ArrayList<>();
+    private List<Property> filteredList = new ArrayList<>();
+
+    private Spinner typeSpinner;
+    private EditText priceInput;
+    private EditText locationInput;
+
+    private String currentUserEmail;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -57,10 +87,84 @@ public class PropertiesFragment extends Fragment {
         }
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_properties, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_properties, container, false);
+
+        recyclerView = view.findViewById(R.id.recycler_properties);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        typeSpinner = view.findViewById(R.id.spinner_type);
+        priceInput = view.findViewById(R.id.et_price);
+        locationInput = view.findViewById(R.id.et_location);
+
+        fullList = JsonParser.properties;
+        filteredList.addAll(fullList);
+
+        currentUserEmail = SharedPrefManager.getInstance(getContext()).readString("user_email", "");
+        DataBaseHelper dbHelper = new DataBaseHelper(getContext(), "Project_DB", null, 1);
+        adapter = new PropertyAdapter(filteredList, getContext(), dbHelper, currentUserEmail);
+
+        recyclerView.setAdapter(adapter);
+
+        setupFilters();
+
+        return view;
     }
+
+    private void setupFilters() {
+        List<String> types = new ArrayList<>();
+        types.add("All");
+        for (Property p : fullList) {
+            if (!types.contains(p.getType())) {
+                types.add(p.getType());
+            }
+        }
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, types);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typeSpinner.setAdapter(spinnerAdapter);
+
+        typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                filterProperties();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
+
+        TextWatcher filterWatcher = new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterProperties();
+            }
+            @Override public void afterTextChanged(Editable s) {}
+        };
+
+        priceInput.addTextChangedListener(filterWatcher);
+        locationInput.addTextChangedListener(filterWatcher);
+    }
+
+    private void filterProperties() {
+        String selectedType = typeSpinner.getSelectedItem().toString();
+        String maxPriceStr = priceInput.getText().toString();
+        String locationQuery = locationInput.getText().toString().toLowerCase();
+
+        int maxPrice = Integer.MAX_VALUE;
+        try { maxPrice = Integer.parseInt(maxPriceStr); } catch (NumberFormatException ignored) { }
+
+        filteredList.clear();
+        for (Property p : fullList) {
+            boolean matchesType = selectedType.equals("All") || p.getType().equalsIgnoreCase(selectedType);
+            boolean matchesPrice = p.getPrice() <= maxPrice;
+            boolean matchesLocation = p.getLocation().toLowerCase().contains(locationQuery);
+            if (matchesType && matchesPrice && matchesLocation) {
+                filteredList.add(p);
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
 }
