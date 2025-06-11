@@ -19,6 +19,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.realestate.R;
 import com.example.realestate.fragments.ContactFragment;
 import com.example.realestate.fragments.FavoritesFragment;
@@ -68,7 +69,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         View headerView = navigationView.getHeaderView(0);
         TextView tvUserName = headerView.findViewById(R.id.tvUserName);
-        ImageView imgUserProfile = headerView.findViewById(R.id.imgUserProfile);
+        ImageView imgDrawerProfile = headerView.findViewById(R.id.imgDrawerProfile);
 
         SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance(this);
         String email = sharedPrefManager.readString("email", "");
@@ -85,13 +86,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 tvUserName.setText("Welcome, " + firstName + " " + lastName);
 
                 if (profileUri != null && !profileUri.isEmpty()) {
-                    try {
-                        imgUserProfile.setImageURI(Uri.parse(profileUri));
-                    } catch (Exception e) {
-                        imgUserProfile.setImageResource(R.drawable.no_picture);
-                    }
+                    Glide.with(this)
+                            .load(profileUri)
+                            .circleCrop()
+                            .into(imgDrawerProfile);
                 } else {
-                    imgUserProfile.setImageResource(R.drawable.no_picture);
+                    imgDrawerProfile.setImageResource(R.drawable.no_picture);
                 }
 
                 cursor.close();
@@ -99,40 +99,39 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
 
     }
+
     public void refreshDrawerHeader() {
         NavigationView navigationView = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         TextView tvUserName = headerView.findViewById(R.id.tvUserName);
-        ImageView imgUserProfile = headerView.findViewById(R.id.imgUserProfile);
+        ImageView imgDrawerProfile = headerView.findViewById(R.id.imgDrawerProfile);
 
-        SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance(this);
-        String email = sharedPrefManager.readString("email", "");
+        if (imgDrawerProfile != null) {
+            SharedPrefManager sharedPrefManager = SharedPrefManager.getInstance(this);
+            String email = sharedPrefManager.readString("email", "");
+            if (email != null) {
+                DataBaseHelper db = new DataBaseHelper(this, "Project_DB", null, 1);
+                Cursor cursor = db.getUserByEmail(email);
+                if (cursor != null && cursor.moveToFirst()) {
+                    String firstName = cursor.getString(cursor.getColumnIndexOrThrow("first_name"));
+                    String lastName = cursor.getString(cursor.getColumnIndexOrThrow("last_name"));
+                    String profileUri = cursor.getString(cursor.getColumnIndexOrThrow("profile_image"));
+                    tvUserName.setText("Welcome, " + firstName + " " + lastName);
 
-        if (email != null) {
-            DataBaseHelper db = new DataBaseHelper(this, "Project_DB", null, 1);
-            Cursor cursor = db.getUserByEmail(email);
-
-            if (cursor != null && cursor.moveToFirst()) {
-                String firstName = cursor.getString(cursor.getColumnIndexOrThrow("first_name"));
-                String lastName = cursor.getString(cursor.getColumnIndexOrThrow("last_name"));
-                String profileUri = cursor.getString(cursor.getColumnIndexOrThrow("profile_image"));
-
-                tvUserName.setText("Welcome, " + firstName + " " + lastName);
-
-                if (profileUri != null && !profileUri.isEmpty()) {
-                    try {
-                        imgUserProfile.setImageURI(Uri.parse(profileUri));
-                    } catch (Exception e) {
-                        imgUserProfile.setImageResource(R.drawable.no_picture);
+                    if (profileUri != null && !profileUri.isEmpty()) {
+                        Glide.with(this)
+                            .load(profileUri)
+                            .circleCrop()
+                            .into(imgDrawerProfile);
+                    } else {
+                        imgDrawerProfile.setImageResource(R.drawable.no_picture);
                     }
-                } else {
-                    imgUserProfile.setImageResource(R.drawable.no_picture);
+                    cursor.close();
                 }
-
-                cursor.close();
             }
         }
     }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment selectedFragment = null;

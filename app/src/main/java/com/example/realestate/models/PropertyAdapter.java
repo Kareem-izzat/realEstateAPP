@@ -72,6 +72,10 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
                 .placeholder(R.drawable.icon_noimg)
                 .into(holder.imgThumbnail);
 
+
+        holder.imgThumbnail.setAlpha(0f);
+        holder.imgThumbnail.animate().alpha(1f).setDuration(700).start();
+
         boolean isFavorite = dbHelper.isFavorite(currentUserEmail, property.getId());
         holder.btnFavorite.setImageResource(
                 isFavorite ? R.drawable.icon_favorite_filled : R.drawable.icon_favorite_border
@@ -128,4 +132,3 @@ public class PropertyAdapter extends RecyclerView.Adapter<PropertyAdapter.Proper
         }
     }
 }
-

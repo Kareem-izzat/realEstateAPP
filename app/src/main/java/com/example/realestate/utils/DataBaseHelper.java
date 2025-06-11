@@ -61,7 +61,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "user_email TEXT, " +
                 "property_id INTEGER, " +
-                "reservation_date TEXT, " +
+                "start_date TEXT, " +
+                "end_date TEXT, " +
                 "FOREIGN KEY(user_email) REFERENCES users(email));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS offers (" +
@@ -87,17 +88,35 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO users VALUES ('tariq.amman@mail.com', 'Tariq123!', 'Tariq', 'Zahran', 'Male', 'Jordan', 'Amman', '+962799999999', '', 'customer');");
         db.execSQL("INSERT INTO users VALUES ('amira.cairo@mail.com', 'Amira123!', 'Amira', 'Nabil', 'Female', 'Egypt', 'Cairo', '+201001111111', '', 'customer');");
 
+        db.execSQL("INSERT INTO favorites VALUES ('ali.ramallah@mail.com', 101)");
+        db.execSQL("INSERT INTO favorites VALUES ('nour.nablus@mail.com', 104)");
+        db.execSQL("INSERT INTO favorites VALUES ('huda.hebron@mail.com', 106)");
+        db.execSQL("INSERT INTO favorites VALUES ('yazan.amman@mail.com', 102)");
+        db.execSQL("INSERT INTO favorites VALUES ('dana.irbid@mail.com', 109)");
+
+
+        db.execSQL("INSERT INTO reservations (user_email, property_id, start_date, end_date) VALUES ('ali.ramallah@mail.com', 101, '2025-06-01', '2025-06-05')");
+        db.execSQL("INSERT INTO reservations (user_email, property_id, start_date, end_date) VALUES ('nour.nablus@mail.com', 104, '2025-06-06', '2025-06-12')");
+        db.execSQL("INSERT INTO reservations (user_email, property_id, start_date, end_date) VALUES ('huda.hebron@mail.com', 106, '2025-06-13', '2025-06-16')");
+        db.execSQL("INSERT INTO reservations (user_email, property_id, start_date, end_date) VALUES ('yazan.amman@mail.com', 102, '2025-06-17', '2025-06-20')");
+        db.execSQL("INSERT INTO reservations (user_email, property_id, start_date, end_date) VALUES ('dana.irbid@mail.com', 109, '2025-06-21', '2025-06-24')");
+        db.execSQL("INSERT INTO reservations (user_email, property_id, start_date, end_date) VALUES ('khaled.cairo@mail.com', 110, '2025-06-25', '2025-06-29')");
+        db.execSQL("INSERT INTO reservations (user_email, property_id, start_date, end_date) VALUES ('mona.alex@mail.com', 105, '2025-07-01', '2025-07-04')");
+        db.execSQL("INSERT INTO reservations (user_email, property_id, start_date, end_date) VALUES ('salma.ramallah@mail.com', 103, '2025-07-05', '2025-07-10')");
+        db.execSQL("INSERT INTO reservations (user_email, property_id, start_date, end_date) VALUES ('tariq.amman@mail.com', 107, '2025-07-11', '2025-07-14')");
+        db.execSQL("INSERT INTO reservations (user_email, property_id, start_date, end_date) VALUES ('amira.cairo@mail.com', 108, '2025-07-15', '2025-07-19')");
+
+
+
 
 
 
     }
 
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS users");
         db.execSQL("DROP TABLE IF EXISTS reservations");
-        db.execSQL("DROP TABLE IF EXISTS favorites");
-        db.execSQL("DROP TABLE IF EXISTS offers");
         onCreate(db);
     }
 
@@ -204,22 +223,31 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.delete("favorites", "user_email = ? AND property_id = ?", new String[]{email, String.valueOf(propertyId)});
     }
 
-    public boolean addReservation(String email, int propertyId, String date) {
+    public boolean addReservation(String email, int propertyId, String startDate, String endDate) {
         SQLiteDatabase db = this.getWritableDatabase();
-
-        Cursor cursor = db.rawQuery("SELECT * FROM reservations WHERE user_email = ? AND property_id = ?",
-                new String[]{email, String.valueOf(propertyId)});
-        if (cursor.getCount() > 0) {
-            cursor.close();
+        // Check for overlapping reservations for the same property
+        Cursor cursor = db.rawQuery(
+            "SELECT * FROM reservations WHERE property_id = ? AND (" +
+            "(date(start_date) <= date(?) AND date(end_date) >= date(?)) OR " +
+            "(date(start_date) <= date(?) AND date(end_date) >= date(?)) OR " +
+            "(date(start_date) >= date(?) AND date(end_date) <= date(?)))",
+            new String[]{
+                String.valueOf(propertyId),
+                startDate, startDate, // overlap at start
+                endDate, endDate,     // overlap at end
+                startDate, endDate    // inside range
+            }
+        );
+        boolean hasCollision = cursor.getCount() > 0;
+        cursor.close();
+        if (hasCollision) {
             return false;
         }
-        cursor.close();
-
         ContentValues values = new ContentValues();
         values.put("user_email", email);
         values.put("property_id", propertyId);
-        values.put("reservation_date", date);
-
+        values.put("start_date", startDate);
+        values.put("end_date", endDate);
         long result = db.insert("reservations", null, values);
         return result != -1;
     }
@@ -227,15 +255,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public List<ReservedProperty> getReservationsForUser(String email) {
         List<ReservedProperty> list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.rawQuery("SELECT r.id, r.property_id, r.reservation_date FROM reservations r WHERE r.user_email = ?", new String[]{email});
+        Cursor cursor = db.rawQuery("SELECT r.id, r.property_id, r.start_date, r.end_date FROM reservations r WHERE r.user_email = ?", new String[]{email});
         while (cursor.moveToNext()) {
             int reservationId = cursor.getInt(0);
             int propId = cursor.getInt(1);
-            String date = cursor.getString(2);
+            String startDate = cursor.getString(2);
+            String endDate = cursor.getString(3);
             Property prop = findPropertyById(propId);
             if (prop != null) {
-                list.add(new ReservedProperty(reservationId, prop, date)); // Pass reservationId here!
+                list.add(new ReservedProperty(reservationId, prop, startDate + " to " + endDate));
             }
         }
         cursor.close();
@@ -270,7 +298,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
     public int getUserCount() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM users", null);
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM users WHERE role = 'customer'", null);
         int count = cursor.moveToFirst() ? cursor.getInt(0) : 0;
         cursor.close();
         return count;
@@ -331,16 +359,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public List<Reservation> getAllReservations() {
         List<Reservation> list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM reservations", null);
+        Cursor cursor = db.rawQuery("SELECT id, user_email, property_id, start_date, end_date FROM reservations", null);
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
                 String email = cursor.getString(cursor.getColumnIndexOrThrow("user_email"));
                 int propertyId = cursor.getInt(cursor.getColumnIndexOrThrow("property_id"));
-                String date = cursor.getString(cursor.getColumnIndexOrThrow("reservation_date"));
+                String startDate = cursor.getString(cursor.getColumnIndexOrThrow("start_date"));
+                String endDate = cursor.getString(cursor.getColumnIndexOrThrow("end_date"));
 
-                list.add(new Reservation(id, email, propertyId, date));
+                list.add(new Reservation(id, email, propertyId, startDate, endDate));
             } while (cursor.moveToNext());
             cursor.close();
         }

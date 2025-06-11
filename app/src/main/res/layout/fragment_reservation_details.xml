@@ -19,6 +19,28 @@
             android:scaleType="centerCrop"
             android:src="@drawable/icon_noimg" />
 
+        <EditText
+            android:id="@+id/editTextStartDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:clickable="true"
+            android:focusable="false"
+            android:hint="@string/select_start_date"
+            android:inputType="none"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/editTextEndDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:clickable="true"
+            android:focusable="false"
+            android:hint="@string/select_end_date"
+            android:inputType="none"
+            android:minHeight="48dp" />
+
         <!-- Title -->
         <TextView
             android:id="@+id/tv_detail_title"

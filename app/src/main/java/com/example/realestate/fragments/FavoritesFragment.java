@@ -1,16 +1,16 @@
 package com.example.realestate.fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.realestate.R;
 import com.example.realestate.models.Property;
@@ -73,6 +73,7 @@ public class FavoritesFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -95,6 +96,17 @@ public class FavoritesFragment extends Fragment {
 
         adapter = new PropertyAdapter(favoriteList, getContext(), dbHelper, currentUserEmail);
         recyclerView.setAdapter(adapter);
+
+        TextView emptyMessage = view.findViewById(R.id.empty_message);
+
+        if (favoriteList.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            emptyMessage.setVisibility(View.VISIBLE);
+            emptyMessage.setText("No favorites found");
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            emptyMessage.setVisibility(View.GONE);
+        }
 
         return view;
     }

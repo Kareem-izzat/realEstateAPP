@@ -6,4 +6,13 @@
     <color name="primary_dark">#205C9E</color>
     <color name="secondary">#F9FAFB</color>
     <color name="purple_500" />
+    <color name="dark_primary">#1E88E5</color> <!-- Blue -->
+    <color name="dark_primary_variant">#1565C0</color>
+    <color name="dark_secondary">#FFC107</color> <!-- Amber -->
+
+    <color name="dark_background">#121212</color> <!-- or a bit brighter like #1E1E1E -->
+    <color name="dark_surface">#F5F5F5</color> <!-- Light surface for contrast -->
+
+    <!-- Dark text (gray or black) for light surfaces -->
+    <color name="dark_text">#222222</color> <!-- or #333333 -->
 </resources>

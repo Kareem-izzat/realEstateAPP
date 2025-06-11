@@ -48,15 +48,13 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
                 .into(holder.imgThumbnail);
 
         holder.btnCancel.setOnClickListener(v -> {
-            int propertyId = property.getId();
-            int reservationId = reserved.getReservationId();
+            int adapterPosition = holder.getAdapterPosition();
+            if (adapterPosition == RecyclerView.NO_POSITION) return;
+            ReservedProperty toRemove = list.get(adapterPosition);
+            int reservationId = toRemove.getReservationId();
             dbHelper.cancelReservationById(reservationId);
-
-
-            list.remove(position);
-            notifyItemRemoved(position);
-
-
+            list.remove(adapterPosition);
+            notifyItemRemoved(adapterPosition);
             Toast.makeText(v.getContext(), "Reservation cancelled", Toast.LENGTH_SHORT).show();
         });
 
@@ -81,4 +79,3 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
         }
     }
 }
-

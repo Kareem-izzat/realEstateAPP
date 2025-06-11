@@ -30,6 +30,7 @@
             android:textStyle="bold"
             android:paddingTop="8dp" />
 
+
         <TextView
             android:id="@+id/tv_reservation_time"
             android:layout_width="wrap_content"

@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.realestate.R;
 import com.example.realestate.activites.HomeActivity;
 import com.example.realestate.utils.DataBaseHelper;
@@ -26,7 +27,7 @@ public class ProfileManageFragment extends Fragment {
 
     private static final int PICK_IMAGE_REQUEST = 101;
 
-    EditText etFirstName, etLastName, etPhone, etPassword, etConfirmPassword;
+    EditText etFirstName, etLastName, etPhone, etPassword, etConfirmPassword, etCurrentPassword;
     MaterialButton btnUpdate;
     ImageView imgProfile;
     Uri selectedImageUri;
@@ -46,6 +47,7 @@ public class ProfileManageFragment extends Fragment {
         etPhone = view.findViewById(R.id.etPhone);
         etPassword = view.findViewById(R.id.etPassword);
         etConfirmPassword = view.findViewById(R.id.etConfirmPassword);
+        etCurrentPassword = view.findViewById(R.id.etCurrentPassword);
         btnUpdate = view.findViewById(R.id.btnUpdate);
         imgProfile = view.findViewById(R.id.imgProfile);
         Button btnChangePhoto = view.findViewById(R.id.btnChangePhoto);
@@ -65,12 +67,23 @@ public class ProfileManageFragment extends Fragment {
                 if (imageUriStr != null && !imageUriStr.isEmpty()) {
                     try {
                         selectedImageUri = Uri.parse(imageUriStr);
-                        imgProfile.setImageURI(selectedImageUri);
+                        Glide.with(requireContext())
+                            .load(selectedImageUri)
+                            .placeholder(R.drawable.no_picture)
+                            .error(R.drawable.no_picture)
+                            .circleCrop()
+                            .into(imgProfile);
                     } catch (Exception e) {
-                        imgProfile.setImageResource(R.drawable.no_picture);
+                        Glide.with(requireContext())
+                            .load(R.drawable.no_picture)
+                            .circleCrop()
+                            .into(imgProfile);
                     }
                 } else {
-                    imgProfile.setImageResource(R.drawable.no_picture);
+                    Glide.with(requireContext())
+                        .load(R.drawable.no_picture)
+                        .circleCrop()
+                        .into(imgProfile);
                 }
 
                 cursor.close();
@@ -91,6 +104,7 @@ public class ProfileManageFragment extends Fragment {
             String phone = etPhone.getText().toString().trim();
             String pass = etPassword.getText().toString();
             String confirmPass = etConfirmPassword.getText().toString();
+            String currentPass = etCurrentPassword.getText().toString();
 
             if (first.length() < 3 || last.length() < 3) {
                 Toast.makeText(getContext(), "Names must be at least 3 characters.", Toast.LENGTH_SHORT).show();
@@ -114,6 +128,15 @@ public class ProfileManageFragment extends Fragment {
             }
 
             if (!pass.isEmpty()) {
+                if (currentPass.isEmpty()) {
+                    Toast.makeText(getContext(), "Please enter your current password to change it.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                DataBaseHelper dbHelper = new DataBaseHelper(getContext(), "Project_DB", null, 1);
+                if (!dbHelper.isValidUser(email, currentPass)) {
+                    Toast.makeText(getContext(), "Current password is incorrect.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (pass.length() < 6 || !pass.matches(".*[a-zA-Z].*") || !pass.matches(".*\\d.*") || !pass.matches(".*[@#$%^&+=!].*")) {
                     Toast.makeText(getContext(), "Password must include a letter, number, and special character.", Toast.LENGTH_LONG).show();
                     return;

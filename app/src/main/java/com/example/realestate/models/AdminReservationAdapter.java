@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -18,9 +19,9 @@ import java.util.List;
 
 public class AdminReservationAdapter extends RecyclerView.Adapter<AdminReservationAdapter.ViewHolder> {
 
-    private Context context;
-    private List<Reservation> reservationList;
-    private DataBaseHelper db;
+    private final Context context;
+    private final List<Reservation> reservationList;
+    private final DataBaseHelper db;
 
     public AdminReservationAdapter(Context context, List<Reservation> reservationList) {
         this.context = context;
@@ -38,7 +39,6 @@ public class AdminReservationAdapter extends RecyclerView.Adapter<AdminReservati
     public void onBindViewHolder(ViewHolder holder, int position) {
         Reservation res = reservationList.get(position);
 
-        // Get full name from DB
         Cursor userCursor = db.getUserByEmail(res.getUserEmail());
         String fullName = res.getUserEmail(); // fallback
         if (userCursor != null && userCursor.moveToFirst()) {
@@ -48,7 +48,6 @@ public class AdminReservationAdapter extends RecyclerView.Adapter<AdminReservati
             userCursor.close();
         }
 
-        // Get property info from static list
         Property property = JsonParser.findPropertyById(res.getPropertyId());
         String title = "Unknown Property";
         String imageUri = null;
@@ -57,11 +56,10 @@ public class AdminReservationAdapter extends RecyclerView.Adapter<AdminReservati
             imageUri = property.getImage_url();
         }
 
-        holder.tvPropertyTitle.setText(title);
-        holder.tvUserEmail.setText("Customer: " + fullName);
-        holder.tvReservationDate.setText("Reserved on: " + res.getReservationDate());
+        holder.tvPropertyTitle.setText(context.getString(R.string.property_title, title));
+        holder.tvUserEmail.setText(context.getString(R.string.customer_name, fullName));
+        holder.tvReservationDate.setText(context.getString(R.string.reservation_period, res.getStartDate(), res.getEndDate()));
 
-        // Load image with Glide
         if (imageUri != null && !imageUri.isEmpty()) {
             Glide.with(context)
                     .load(imageUri)
@@ -78,7 +76,7 @@ public class AdminReservationAdapter extends RecyclerView.Adapter<AdminReservati
         return reservationList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgProperty;
         TextView tvPropertyTitle, tvUserEmail, tvReservationDate;
 

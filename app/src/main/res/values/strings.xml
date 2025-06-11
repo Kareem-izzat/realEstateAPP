@@ -57,6 +57,19 @@
     <string name="about_us">About Us</string>
     <string name="we_are_kareem_alqutob_and_ahmad_hussein_two_passionate_computer_engineering_students_with_a_shared_dream_building_something_impactful_in_the_real_estate_world_n_nthis_app_is_our_first_step_a_fusion_of_technology_and_ambition_thank_you_for_joining_us_on_this_journey">We are Kareem Alqutob and Ahmad Hussein, two passionate Computer Engineering students with a shared dream: building something impactful in the real estate world.\n\nThis app is our first step — a fusion of technology and ambition. Thank you for joining us on this journey!</string>
     <string name="_2025_kareem_amp_ahmad"><![CDATA[© 2025 Kareem & Ahmad]]></string>
+    <string name="type_format">Type: %1$s</string>
+    <string name="price_format">Price: $%1$d</string>
+    <string name="location_format">Location: %1$s</string>
+    <string name="area_format">Area: %1$s</string>
+    <string name="bedrooms_format">Bedrooms: %1$d</string>
+    <string name="bathrooms_format">Bathrooms: %1$d</string>
+    <string name="select_start_date">Select start date</string>
+    <string name="select_end_date">Select end date</string>
+    <string name="property_title">Property Title: %1$s</string>
+    <string name="customer_name">Customer: %1$s</string>
+    <string name="reservation_period">Reservation Period: %1$s to %2$s</string>
+    <string name="no_reservations_found">No reservations found</string>
+    <string name="delete_customer">Delete customer</string>
     <string-array name="property_types">
         <item>All</item>
         <item>Apartment</item>
